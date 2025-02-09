@@ -2,3 +2,4 @@ wordcloud
 pymongo
 seaborn
 environs
+plotly

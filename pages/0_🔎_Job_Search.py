@@ -1,3 +1,4 @@
+import plotly.express as px
 import streamlit as st
 # from src.persistence.repositories import JobRepository
 
@@ -8,6 +9,7 @@ st.set_page_config(
     page_icon='🔎',
     layout="wide"
 )
+
 
 # left, right = st.columns([9, 1])
 
