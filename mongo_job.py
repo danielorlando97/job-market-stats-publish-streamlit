@@ -1,6 +1,8 @@
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from environs import Env
+import streamlit as st
+import pandas as pd
 
 env = Env()
 env.read_env()
@@ -54,3 +56,12 @@ class DBMongoJobs:
 
         cursor = cursor.skip(skip).limit(page_size)
         return [item for item in cursor]
+
+
+db = DBMongoJobs()
+
+
+@st.cache_data
+def get_df(portal):
+    df = pd.DataFrame(db.get_all())
+    return df[df['portal'] == portal]

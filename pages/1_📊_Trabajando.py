@@ -1,3 +1,6 @@
+import numpy as np
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 import streamlit as st
 # from src.persistence.repositories import JobRepository
 import seaborn as sns
@@ -10,20 +13,21 @@ from collections import Counter
 
 
 st.set_page_config(
-    page_title="GetOnBoard",
+    page_title="Trabajando",
     page_icon='📊',
     layout="wide"
 )
 
-df = get_df("GetOnBoard")
+df = get_df("Trabajando")
+
 # fig = px.bar(
 #     df,
 #     x="sepal_width",
 #     y="sepal_length",
 # )
 
-fig = px.histogram(df, x='seniority', color="seniority")
-event = st.plotly_chart(fig, key="seniority", on_select="rerun")
+fig = px.histogram(df, x='experience', color="experience")
+event = st.plotly_chart(fig, key="experience", on_select="rerun")
 
 fig = px.histogram(df, x='modality', color="modality")
 event = st.plotly_chart(fig, key="modality", on_select="rerun")
@@ -85,9 +89,17 @@ st.pyplot(fig)
 # plot = sns.boxplot(data=df, y="max_salary", hue='seniority')
 # st.pyplot(fig)
 
-fig = px.histogram(df, x='max_salary', color='seniority',
-                   facet_col='seniority', facet_col_wrap=3)
+
+df['experience'] = df['experience'].str.findall(r'\d+').apply(lambda x: x[0])
+df_filtered = df[df['max_salary'] != 0].sort_values('experience')
+
+fig = px.histogram(df_filtered, x='max_salary', color='experience',
+                   facet_col='experience', facet_col_wrap=4)
 event = st.plotly_chart(fig, key="max_salary_hist", on_select="rerun")
 
-fig = px.box(df, x='seniority', y="max_salary", color='seniority')
-event = st.plotly_chart(fig, key="max_salary", on_select="rerun")
+fig = px.box(df_filtered, y="max_salary", color='experience',
+             facet_col='experience', facet_col_wrap=4)
+# fig.update_yaxes(matches=None)
+fig.update_xaxes(matches=None)
+event = st.plotly_chart(fig, key="max_salary",
+                        on_select="rerun", use_container_width=True)
