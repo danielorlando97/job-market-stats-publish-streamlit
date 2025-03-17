@@ -6,7 +6,6 @@ from wordcloud import WordCloud
 from mongo_job import get_df
 
 import plotly.express as px
-from collections import Counter
 
 
 st.set_page_config(
@@ -16,18 +15,31 @@ st.set_page_config(
 )
 
 df = get_df("GetOnBoard")
+df['seniority_num'] = df['seniority'].map({"Expert": 5, 'Senior': 4, "Semi Senior": 3,
+                                           "Junior": 2, "No experience required": 1})
+
+df = df.sort_values(by='seniority_num')
 # fig = px.bar(
 #     df,
 #     x="sepal_width",
 #     y="sepal_length",
 # )
 
+st.header("Seniority Dist")
+
 fig = px.histogram(df, x='seniority', color="seniority")
 event = st.plotly_chart(fig, key="seniority", on_select="rerun")
+
+st.divider()
+
+st.header("Modality Dist")
 
 fig = px.histogram(df, x='modality', color="modality")
 event = st.plotly_chart(fig, key="modality", on_select="rerun")
 
+st.divider()
+
+st.header("Country Dist")
 
 df_countries = df[['id', 'countries', 'max_salary', 'min_salary']]
 
@@ -69,6 +81,9 @@ df_filtered = df_filtered.reset_index()
 fig = px.bar(df_filtered, x='countries', y='id', color="countries")
 event = st.plotly_chart(fig, key="countries", on_select="rerun")
 
+st.divider()
+
+st.header("Titles WordCloud")
 
 # Create some sample text
 text = ', '.join(str(s) for s in df['name'].to_list())
@@ -80,11 +95,23 @@ plt.imshow(wordcloud, interpolation='bilinear')
 plt.axis("off")
 st.pyplot(fig)
 
+st.divider()
 
-# fig = plt.figure(figsize=(10, 4))
-# plot = sns.boxplot(data=df, y="max_salary", hue='seniority')
-# st.pyplot(fig)
 
+st.header("Salary vs Seniority Dist")
+
+max_salary = df['max_salary'].max()
+min_salary = df['max_salary'].min()
+
+min_salary, max_salary = st.slider(
+    "How old are you?",
+    min_salary,
+    max_salary,
+    (min_salary, max_salary),
+    label_visibility='hidden'
+)
+
+df = df[(df['max_salary'] >= min_salary) & (df['max_salary'] <= max_salary)]
 fig = px.histogram(df, x='max_salary', color='seniority',
                    facet_col='seniority', facet_col_wrap=3)
 event = st.plotly_chart(fig, key="max_salary_hist", on_select="rerun")
