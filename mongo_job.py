@@ -28,6 +28,8 @@ class DBMongoJobs:
         fields = fields or [
             "id",
             "name",
+            "name_tokens",
+            "name_lang",
             "body",
             "published_at",
 

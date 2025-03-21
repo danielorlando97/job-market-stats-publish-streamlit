@@ -10,6 +10,9 @@ seaborn = "*"
 environs = "*"
 plotly = "*"
 streamlit = "*"
+tqdm = "*"
+networkx = "*"
+scikit-learn = "*"
 
 [dev-packages]
 
