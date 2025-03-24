@@ -4,15 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-wordcloud = "*"
-pymongo = "*"
-seaborn = "*"
+wordcloud = "1.9.4"
+pymongo = "4.11"
+seaborn = "0.13.2"
 environs = "*"
-plotly = "*"
-streamlit = "*"
+plotly = "6.0.0"
+streamlit = "1.42.0"
 tqdm = "*"
 networkx = "*"
 scikit-learn = "*"
+typing_extensions = "4.12.2"
 
 [dev-packages]
 
