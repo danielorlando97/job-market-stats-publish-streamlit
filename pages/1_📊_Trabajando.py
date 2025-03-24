@@ -152,48 +152,48 @@ if start_word:
 
     st.divider()
 
-if "Trabajando_data" not in st.session_state:
-    st.session_state.Trabajando_data = None
+# if "Trabajando_data" not in st.session_state:
+#     st.session_state.Trabajando_data = None
 
-if st.session_state.Trabajando_data is None:
-    with st.spinner("Compute Distances"):
+# if st.session_state.Trabajando_data is None:
+#     with st.spinner("Compute Distances"):
 
-        df = DATA[~DATA['name_tokens'].isna()]
-        matrix = compute_distance_matrix(df_set.tolist(), dice_distance)
-        # matrix = wait_task_result("Trabajando_set_matrix")
-        NODES = [
-            Node(index, tokens=TokenSet(row['name_tokens']), text=row['name'])
-            for index, row in df.iterrows()
-        ]
+#         df = DATA[~DATA['name_tokens'].isna()]
+#         matrix = compute_distance_matrix(df_set.tolist(), dice_distance)
+#         # matrix = wait_task_result("Trabajando_set_matrix")
+#         NODES = [
+#             Node(index, tokens=TokenSet(row['name_tokens']), text=row['name'])
+#             for index, row in df.iterrows()
+#         ]
 
-        cluster = build_cluster(matrix)
-        root = build_agglomerative_tree(cluster, NODES)
-        root = count_visit(root)
-        root = compute_tokens_visit(root)
-        root = balance_visit(root)
-        root = count_visit(root)
-        st.session_state.Trabajando_data = pd.DataFrame(
-            build_list(root, whole_tree=True))
+#         cluster = build_cluster(matrix)
+#         root = build_agglomerative_tree(cluster, NODES)
+#         root = count_visit(root)
+#         root = compute_tokens_visit(root)
+#         root = balance_visit(root)
+#         root = count_visit(root)
+#         st.session_state.Trabajando_data = pd.DataFrame(
+#             build_list(root, whole_tree=True))
 
 
-data = st.session_state.Trabajando_data
-fig = go.Figure(go.Treemap(
-    ids=data.id,
-    labels=data.text,
-    parents=data.parent,
-    values=data.children_count,
-    branchvalues="total",
-    sort=True,
-    hovertext=data.words,
-    marker_colorscale='Blues',
-    # color='day'
-    # hoverinfo="text",
-    # root_color="Blues"
-))
+# data = st.session_state.Trabajando_data
+# fig = go.Figure(go.Treemap(
+#     ids=data.id,
+#     labels=data.text,
+#     parents=data.parent,
+#     values=data.children_count,
+#     branchvalues="total",
+#     sort=True,
+#     hovertext=data.words,
+#     marker_colorscale='Blues',
+#     # color='day'
+#     # hoverinfo="text",
+#     # root_color="Blues"
+# ))
 
-fig.update_layout(
-    uniformtext=dict(minsize=10, mode='hide'),
-    margin=dict(t=0, l=0, r=0, b=0)
-)
+# fig.update_layout(
+#     uniformtext=dict(minsize=10, mode='hide'),
+#     margin=dict(t=0, l=0, r=0, b=0)
+# )
 
-event = st.plotly_chart(fig, key="cluster", on_select="rerun")
+# event = st.plotly_chart(fig, key="cluster", on_select="rerun")
